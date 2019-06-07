@@ -1,0 +1,21 @@
+# Data Files
+*.tsz
+*.zip
+*.npy
+*.npz
+
+# Cache Files
+__pycache__/
+**/.idea/
+
+# Log Files
+*.log
+*.pkl
+
+# Notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+# Image
+*.png
+.png
