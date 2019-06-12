@@ -166,7 +166,7 @@ class ModelingPipeline:
               BaggingClassifier, AdaBoostClassifier, GaussianNB,
               KNeighborsClassifier, LinearSVC]
 
-    THRESHOLDS = [5, 10]
+    THRESHOLDS = [5, 10, 15, 20]
     BASE_METRICS = ["accuracy", "precision", "recall", "f1", "roc_auc"]
 
     METRICS = []
@@ -190,19 +190,19 @@ class ModelingPipeline:
         },
 
         "Random Forest": {
-            'n_estimators': [100, 300, 500, 700, 1000],
+            'n_estimators': [100, 300, 500, 1000],
             'max_depth': [5, 10, 15, 20],
             'max_features': [5, 10, 15, 20, 25, 30]
         },
 
         "Bagging": {
-            'n_estimators': [100, 300, 500, 700, 1000],
+            'n_estimators': [100, 300, 500, 1000],
             'max_samples': [0.05, 0.1, 0.3, 0.5, 0.7, 1.0],
             'max_features': [5, 10, 15, 20, 25, 30]
         },
 
         "Ada Boosting": {
-            'n_estimators': [100, 300, 500, 700, 1000],
+            'n_estimators': [100, 300, 500, 1000],
             'algorithm': {"SAMME", "SAMME.R"},
             'learning_rate': [0.001, 0.01, 0.1, 0.5, 1, 10]
         },
@@ -230,15 +230,12 @@ class ModelingPipeline:
                                 'oob_score': True,
                                 'n_jobs': -1},
                     "Ada Boosting": {'random_state': SEED},
-                    "Gradient Boosting": {'random_state': SEED},
-                    "Extra Tree": {'random_state': SEED,
-                                   'n_jobs': -1},
                     "Naive Bayes": {},
                     "KNN": {'n_jobs': -1},
                     "Linear SVM": {'random_state': SEED}
                     }
 
-    def __init__(self, data, batch, cv=5, ask_user=True, verbose=1, plot=True):
+    def __init__(self, data, batch, cv=3, ask_user=True, verbose=1, plot=True):
         """
         Construct a preprocessing pipeline given name of the data file.
 
@@ -688,7 +685,7 @@ if __name__ == "__main__":
 
         logger.info("**" + "-" * 200 + "**")
         data = load_features(dir_path, labeled_test=True)
-        train_pipe = ModelingPipeline(data, batch, cv=5, **args_dict)
+        train_pipe = ModelingPipeline(data, batch, cv=3, **args_dict)
         train_pipe.run()
         logger.info("**" + "-" * 200 + "**")
 

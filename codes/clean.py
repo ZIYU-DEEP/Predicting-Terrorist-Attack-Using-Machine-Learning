@@ -1,11 +1,23 @@
+"""
+Title:       Clean the aggregated GTD data. Create new features that takes
+             terrorist attacks in the past in to considerations.
+
+Description:
+
+Author:      Si Young Byun & Kunyu He, CAPP'20, The University of Chicago
+"""
+
 import pandas as pd
 import numpy as np
+import os
+from os import path
 
-from featureEngineering import create_dirs
-
+#----------------------------------------------------------------------------#
 INPUT_DIR = "../data/"
 OUTPUT_DIR = "../data/aggregated_data/"
 
+
+#----------------------------------------------------------------------------#
 def read_data(file_name, drop_na=False):
     """
     Read credit data in the .csv file and data types from the .json file.
@@ -18,7 +30,7 @@ def read_data(file_name, drop_na=False):
         (DataFrame) clean data set with correct data types
 
     """
-    data = pd.read_csv(INPUT_DIR + file_name)
+    data = pd.read_csv(file_name)
 
     if drop_na:
         data.dropna(axis=0, inplace=True)
@@ -28,15 +40,15 @@ def read_data(file_name, drop_na=False):
     return data
 
 
-def slice_data(data, var, start_year, end_year):
+def slice_data(data, var, years):
+    
+    (start_year, end_year) = years
     early_start_date = str(start_year - 5) + "-01-01"
-    start_date = str(start_year) + "-01-01"
     end_date = str(end_year + 1) + "-01-01"
 
     full_data = data[(data[var] >= early_start_date) & (data[var] < end_date)]
-    cal_data = data[(data[var] >= start_date) & (data[var] < end_date)]
 
-    return full_data, cal_data
+    return full_data
 
 
 def clean(df):
@@ -140,7 +152,7 @@ def sum_past_k_year_data(df, col, loc_id, year, k):
 
 def count_past_k_year_data(df, col, loc_id, year, k):
     count = len(set(df.groupby(['loc_id', 'year', col]).count().loc[loc_id].loc[
-                    year - k + 1:year - 1].index.get_level_values(
+                    int(year) - k + 1:int(year) - 1].index.get_level_values(
         col).values.tolist()))
 
     return count
@@ -172,31 +184,42 @@ def add_past_k(df, full_df, k):
 #----------------------------------------------------------------------------#
 if __name__ == "__main__":
 
-    gtd = read_data("rev_gtd4.csv")
+    #gtd = read_data("rev_gtd4.csv")
+    counter = 0
+    for i in range(2002, 2006, 2):
+        data = read_data("rev_gtd4.csv")
+        test_year = (i, i + 1)
+        train_year = (i - 6, i - 1)
+        #print("Train year: {}, test year: {}".format(train_year, test_year))
+        test_train = [test_year, train_year]
+        name = ["test", "train"]
+        for i, year in enumerate(test_train):
+            folder_name = "./train test sets/Batch {}".format(counter)
+            if not path.exists(folder_name):
+                os.mkdir(folder_name)
+            start_year = year[0]
+            end_year = year[1]
+            # CHECKING IF THE FILE EXISTS
+            save_file = folder_name + "/{}.csv".format(name[i])
+            if path.exists(save_file):
+                continue
+            data = slice_data(data, "date", year)
+            cleaned = clean(data)
+            pre_ag = cleaned[(cleaned.year <= end_year) & (cleaned.year >= start_year)]
+            aggregated = aggregate(pre_ag)
+            filled = fill_year_gaps(aggregated, start_year, end_year)
+            Ks = [2, 5]
+            for col in ['nkill', 'nwound']:
+                for k in Ks:
+                    col_name = col + '_past_{}'.format(k)
+                    filled[col_name] = filled.apply(lambda row : sum_past_k_year_data(cleaned, col, row['loc_id'], row['year'], k), axis=1)
 
-    output_dir = OUTPUT_DIR + "{}-{}/".format(2006, 2007)
-    create_dirs(output_dir)
-
-    # train
-    start_year, end_year = 2002, 2005
-    full_train, cal_train = slice_data(gtd, "date", start_year, end_year)
-    full_train_cleaned, cal_train_cleaned = clean(full_train), clean(cal_train)
-    cal_train_agg = aggregate(cal_train_cleaned)
-    train_prepared = fill_year_gaps(cal_train_agg, start_year, end_year)
-
-    for k in [2, 5]:
-        train_prepared = add_past_k(train_prepared, full_train_cleaned, k)
-
-    train_prepared.to_csv(output_dir + "train.csv", index=False)
-
-    # test
-    start_year, end_year = 2006, 2007
-    full_test, cal_test = slice_data(gtd, "date", start_year, end_year)
-    full_test_cleaned, cal_test_cleaned = clean(full_test), clean(cal_test)
-    cal_test_agg = aggregate(cal_test_cleaned)
-    test_prepared = fill_year_gaps(cal_test_agg, start_year, end_year)
-
-    for k in [2, 5]:
-        test_prepared = add_past_k(test_prepared, full_train_cleaned, k)
-
-    test_prepared.to_csv(output_dir + "test.csv", index=False)
+            for col in ['attacktype', 'targettype', 'group_name']:
+                for k in Ks:
+                    col_name = col + '_past_{}'.format(k)
+                    filled[col_name] = filled.apply(lambda row : count_past_k_year_data(cleaned, col, row['loc_id'], row['year'], k), axis=1)
+            filled.drop(columns=['nkill', 'nwound', 'attacktype', 'targettype', 'group_name', 'targetsubtype'], inplace=True)
+            # SAVING THE FILE
+            filled.to_csv(save_file, index=False)
+            #print("{} DONE!".format(year))
+        counter += 1
