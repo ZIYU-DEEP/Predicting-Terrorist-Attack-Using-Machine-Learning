@@ -27,8 +27,8 @@ from sklearn.preprocessing import OrdinalEncoder, StandardScaler, MinMaxScaler
 
 
 #----------------------------------------------------------------------------#
-INPUT_DIR = "../processed_data/"
-OUTPUT_DIR = "../processed_data/"
+INPUT_DIR = "../data/train test sets/"
+OUTPUT_DIR = "../processed_data/supervised_learning/"
 LOG_DIR = "../logs/featureEngineering/"
 
 TRAIN_FILE = "train.csv"
@@ -109,72 +109,6 @@ def create_dirs(dir_path):
         file.close()
 
 
-def temporal_split(data, var, test_length, gap):
-    """
-    Split the data into several train and test pairs with fixed-length test sets
-    and variant-length training set. Training sets are all the observations up
-    till the test sets plus gap (to give the results enough time to show up).
-    The first training set is of the same length as the test sets.
-
-    Inputs:
-        - data (DataFrame) data matrix to be split it to training and test sets
-        - var (string): split in terms of the column
-        - test_length (string): length of the test set (e.x. 6M, 10D)
-        - gap (string): length of the gap between training and test set, and
-            after test set until the end
-
-    Returns:
-        (list of tuples of DataFrames) each tuple is a training and test pair
-
-    """
-    gap_delta = pd.Timedelta(int(re.findall(r'[0-9]+', gap)[0]),
-                             re.findall(r'[a-zA-Z]+', gap)[0])
-    test_delta = pd.Timedelta(int(re.findall(r'[0-9]+', test_length)[0]),
-                              re.findall(r'[a-zA-Z]+', test_length)[0])
-    pairs = []
-
-    training_end = (data[var].min() + test_delta).date()
-    test_start = training_end + gap_delta
-    test_end = test_start + test_delta
-    max_date = data[var].max().date() - gap_delta
-
-    while test_end <= max_date:
-        pairs.append((data[data[var] < training_end],
-                      data[(data[var] >= test_start) & (data[var] < test_end)]))
-
-        test_start = test_end
-        test_end += test_delta
-        training_end = test_start - gap_delta
-
-    logger.info(("Using a test length of '%s', with a '%s' gap between "
-                 "training and test sets, and at the end of the data set "
-                 "observations of the last '%s' cannot be used for either "
-                 "training or testing.") % (test_length, gap, gap))
-    logger.info(("Print the start and end date for each of the %s pairs of "
-                 "training and test sets to verify the split works.\n") %
-                len(pairs))
-    for i, (train, test) in enumerate(pairs):
-        messages = ["<TRAINING-TEST PAIR %s>" % i,
-                    "<TRAINING SET TIME RANGE> %s - %s;" %
-                    (train[var].min().date(), train[var].max().date()),
-                    "<NUMBER OF TRAINING SAMPLES> %s;" % train.shape[0],
-                    "<TEST SET TIME RANGE> %s - %s" %
-                    (test[var].min().date(), test[var].max().date()),
-                    "<NUMBER OF TEST SAMPLES> %s;" % test.shape[0]]
-        dir_path = OUTPUT_DIR + ("Batch %s/" % i)
-        create_dirs(dir_path)
-        with open(dir_path + "time_window.txt", 'w') as file:
-            file.write(",".join(messages))
-
-        for message in messages:
-            logger.info(message)
-        logger.info("\n\n")
-    logger.info("All time windows wrote to sub-directories under %s.\n" %
-                OUTPUT_DIR)
-
-    return pairs
-
-
 def read_feature_names(dir_path, file_name):
     """
     Read .txt files with only one line as feature names separated by ",". Save
@@ -187,18 +121,6 @@ def read_feature_names(dir_path, file_name):
         return np.array(handle.readline().split(","))
 
 
-def create_dirs(dir_path):
-    """
-    Create a new directory if it doesn't exist and add a '.gitkeep' file to the
-    directory.
-
-    """
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
-        file = open(dir_path + ".gitkeep", "w+")
-        file.close()
-
-
 class FeaturePipeLine:
     """
     Preprocess pipeline for a data set from CSV file. Modify the class
@@ -208,31 +130,20 @@ class FeaturePipeLine:
     At last, apply scaling.
 
     """
-    TO_FILL_CON = {'DIS_LAKE', 'DIS_MAJOR_RIVER', 'DIS_OCEAN', 'DIS_RIVER',
-                   'PRECAVNEW80_08', 'TEMPAV_8008', 'MER_40'}
-
+    TO_FILL_CON = {}
     TO_FILL_OBJ = {}
-
     TO_DISCRETIZE = {}
-
-    TO_COMBINE = {'HighRelig': {"MISC": None},
-                  'ReligCatP': {"MISC": None},
-                  'ChrCatP': {"MISC": None}}
-
+    TO_COMBINE = {}
     TO_BINARIES = {}
-
     TO_EXTRACT_DATE_TIME = {}
-
-    TO_ONE_HOT = ['HighRelig', 'ReligCatP', 'ChrCatP']
-
+    TO_ONE_HOT = []
     TARGET = 'attacked'
-    TO_DROP = ['loc_id', 'year']
+    TO_DROP = []
 
     SCALERS = [StandardScaler, MinMaxScaler]
     SCALER_NAMES = ["Standard Scaler", "MinMax Scaler"]
 
-
-    def __init__(self, batch, data, file_name=DATA_FILE, ask_user=True,
+    def __init__(self, batch, data, file_name=TRAIN_FILE, ask_user=True,
                  verbose=True, test=False):
         """
         Construct a preprocessing pipeline given name of the data file.
@@ -266,7 +177,7 @@ class FeaturePipeLine:
                                          self.SCALER_NAMES[self.scaler_index]))
         else:
             dir_path = INPUT_DIR + ("Batch %s/" % self.batch)
-            self.scaler = joblib.load(dir_path + 'fitted_scaler.pkl')
+            self.scaler = joblib.load(dir_path + 'fitted_scaler.joblib')
             logger.info("<BATCH %s: Test data preprocessing> Pre-fitted scaler "
                         "loaded.")
 
@@ -315,6 +226,8 @@ class FeaturePipeLine:
             if self.verbose:
                 logger.info("\tFilled missing values in '%s' with '%s'." %
                             (var, fill))
+
+        return self
 
     def discretize(self):
         """
@@ -417,6 +330,8 @@ class FeaturePipeLine:
                     logger.info("\tExtracted %s from '%s' into '%s'." %
                                 (extract, var, new_col))
 
+        return self
+
     def one_hot(self):
         """
         Creates binary/dummy variables from multinomials, drops the original
@@ -463,6 +378,8 @@ class FeaturePipeLine:
                         % (["Train", "Test"][int(self.test)], file_name,
                            dir_path))
 
+        return self
+
     def compare_train_test(self):
         """
         Compare the features in the training and test set after preprocessing.
@@ -491,6 +408,8 @@ class FeaturePipeLine:
                 logger.info("\t'%s' added to the %sth column of the test set "
                             "with all zeros." % (var, i))
 
+        return self
+
     def scale(self):
         """
         Fit and transform the scaler on the training data and return the
@@ -507,10 +426,10 @@ class FeaturePipeLine:
             self.scaler.fit(self.X.values.astype(float))
             dir_path = INPUT_DIR + ("Batch %s/" % self.batch)
             create_dirs(dir_path)
-            joblib.dump(self.scaler, dir_path + 'fitted_scaler.pkl')
+            joblib.dump(self.scaler, dir_path + 'fitted_scaler.joblib')
             logger.info(("<Training data preprocessing> Fitted scaler dumped "
-                         "to '%s' under directory '%s'.") % ('fitted_scaler.pkl',
-                                                             dir_path))
+                         "to 'fitted_scaler.joblib' under directory '%s'.") %
+                        dir_path)
 
         self.X = self.scaler.transform(self.X.values.astype(float))
         logger.info("Finished scaling the feature matrix.")
@@ -581,11 +500,50 @@ if __name__ == "__main__":
 
     logger.info("**" + "-" * 180 + "**")
 
-    train = read_data(TRAIN_FILE)
-    training_pipeline = FeaturePipeLine(0, train, **args_dict, test=False)
-    training_pipeline.preprocess()
+    # Configure FeaturePipeLine
+    FeaturePipeLine.TO_FILL_CON = {'DIS_LAKE',
+                                   'DIS_MAJOR_RIVER',
+                                   'DIS_OCEAN',
+                                   'DIS_RIVER',
+                                   'PRECAVNEW80_08',
+                                   'TEMPAV_8008',
+                                   'MER_40'}
+    FeaturePipeLine.TO_COMBINE = {'HighRelig': {"MISC": None},
+                                  'ReligCatP': {"MISC": None},
+                                  'ChrCatP': {"MISC": None}}
+    FeaturePipeLine.TO_ONE_HOT = ['HighRelig',
+                                  'ReligCatP',
+                                  'ChrCatP']
+    FeaturePipeLine.TARGET = 'attacked'
+    FeaturePipeLine.TO_DROP = ['loc_id', 'year']
 
-    test = read_data(TEST_FILE)
-    test_pipeline = FeaturePipeLine(0, test, **args_dict, test=True)
+
+    # define preprocessing
+    def preprocess_gtd(self):
+        self.con_fill_na().to_combine().one_hot().feature_target_split()
+
+        if self.test:
+            self.compare_train_test()
+
+        self.scale().save_data()
+
+        logger.info("\n\n<BATCH %s: Finished processing %s data>" %
+                    (self.batch, ["training", "test"][int(self.test)]))
+        logger.info("#" + "-" * 130 + "#\n\n")
+
+
+    FeaturePipeLine.preprocess = preprocess_gtd
+
+    # Start Preprocessing
+    for batch, sub_dir in enumerate(next(os.walk(INPUT_DIR))[1]):
+        dir_path = "{}/".format(sub_dir)
+
+        train = read_data(dir_path + TRAIN_FILE)
+        training_pipeline = FeaturePipeLine(batch, train, **args_dict, test=False)
+        training_pipeline.preprocess()
+
+        test = read_data(dir_path + TEST_FILE)
+        test_pipeline = FeaturePipeLine(batch, test, **args_dict, test=True)
+        test_pipeline.preprocess()
 
     logger.info("**" + "-" * 180 + "**")
