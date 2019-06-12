@@ -1,40 +1,40 @@
-﻿Category,Feature,Definition,Calculation,Source
-Geographical,elevation,,,G-Econ
-,DIS_LAKE,,,
-,DIS_MAJOR_RIVER,,,
-,DIS_OCEAN,,,
-,DIS_RIVER,,,
-,PRECAVNEW80_08,,,
-,TEMPAV_8008,,,
-,ethin_div,,,
-,MER_40,,,
-,POPGPW_40,,,
-Past Terrorist Attacks,nkill_past_2,,,GTD
-,nkill_past_5,,,
-,nwound_past_2,,,
-,nwound_past_5,,,
-,attacktype_past_2,,,
-,attacktype_past_5,,,
-,targettype_past_2,,,
-,targettype_past_5,,,
-,group_name_past_2,,,
-,group_name_past_5,,,
-,HighRelig_Christians,,,
-,HighRelig_Hindus,,,
-,HighRelig_MISC,,,
-,HighRelig_Muslims,,,
-,ReligCatP_40-60%,,,
-,ReligCatP_60-75%,,,
-,ReligCatP_75-85%,,,
-,ReligCatP_85-90%,,,
-,ReligCatP_90-95%,,,
-,ReligCatP_95-100%,,,
-,ReligCatP_MISC,,,
-,ChrCatP_0-2%,,,
-,ChrCatP_2-5%,,,
-,ChrCatP_5-10%,,,
-,ChrCatP_10-40%,,,
-,ChrCatP_40-60%,,,
-,ChrCatP_60-75%,,,
-,ChrCatP_75-85%,,,
-,ChrCatP_95-100%,,,
+Category,Feature,Definition,Calculation,Source
+Geographical,elevation,elevation(km),,G-Econ
+,DIS_LAKE,Distance to major navigable lake(km),,G-Econ
+,DIS_MAJOR_RIVER,Distance to major navigable river(km),,G-Econ
+,DIS_OCEAN,Distance to major navigable ocean(km),,G-Econ
+,DIS_RIVER,Distance to navigable river(km),,G-Econ
+,PRECAVNEW80_08,Average precipitation between 1980-2008,,G-Econ
+,TEMPAV_8008,Average temperature between 1980-2008,,G-Econ
+,ethin_div,number of ethnic groups in the area,,Geo-EPR
+,MER_40,Gross cell product($),,G-Econ
+,POPGPW_40,Grid cell population,,G-Econ
+Past Terrorist Attacks,nkill_past_2,number of people killed,,GTD
+,nkill_past_5,,,GTD
+,nwound_past_2,number of people wound,,GTD
+,nwound_past_5,,,GTD
+,attacktype_past_2,type of attack,,GTD
+,attacktype_past_5,,,GTD
+,targettype_past_2,type of target,,GTD
+,targettype_past_5,,,GTD
+,group_name_past_2,terrorist group name,,GTD
+,group_name_past_5,,,GTD
+,HighRelig_Christians,major religion in the area(Christianity),,World Religion map
+,HighRelig_Hindus,major religion in the area(Hindus),,World Religion map
+,HighRelig_MISC,major religion in the area(MISC),,World Religion map
+,HighRelig_Muslims,major religion in the area(Muslims),,World Religion map
+,ReligCatP_40-60%,Proportion of major religion in the area(40-60%) ,,World Religion map
+,ReligCatP_60-75%,Proportion of major religion in the area(60-75%) ,,World Religion map
+,ReligCatP_75-85%,Proportion of major religion in the area(75-85%) ,,World Religion map
+,ReligCatP_85-90%,Proportion of major religion in the area(85-90%) ,,World Religion map
+,ReligCatP_90-95%,Proportion of major religion in the area(90-95%) ,,World Religion map
+,ReligCatP_95-100%,Proportion of major religion in the area(95-100%) ,,World Religion map
+,ReligCatP_MISC,Proportion of major religion in the area(MISC) ,,World Religion map
+,ChrCatP_0-2%,Proportion of Christianity(0-2%),,World Religion map
+,ChrCatP_2-5%,Proportion of Christianity(2-5%),,World Religion map
+,ChrCatP_5-10%,Proportion of Christianity(5-10%),,World Religion map
+,ChrCatP_10-40%,Proportion of Christianity(10-40%),,World Religion map
+,ChrCatP_40-60%,Proportion of Christianity(40-60%),,World Religion map
+,ChrCatP_60-75%,Proportion of Christianity(60-75%),,World Religion map
+,ChrCatP_75-85%,Proportion of Christianity(75-85%),,World Religion map
+,ChrCatP_95-100%,Proportion of Christianity(95-100%),,World Religion map
