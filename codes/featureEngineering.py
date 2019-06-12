@@ -464,15 +464,7 @@ class FeaturePipeLine:
         Finish preprocessing the data file.
 
         """
-        self.con_fill_na().to_combine()
-        self.one_hot().feature_target_split()
-        if self.test:
-            self.compare_train_test()
-        self.scale().save_data()
-
-        logger.info("\n\n<BATCH %s: Finished processing %s data>" %
-                    (self.batch, ["training", "test"][int(self.test)]))
-        logger.info("#" + "-" * 130 + "#\n\n")
+        pass
 
 
 #----------------------------------------------------------------------------#
