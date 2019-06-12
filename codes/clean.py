@@ -4,7 +4,7 @@ Title:       Clean the aggregated GTD data. Create new features that takes
 
 Description:
 
-Author:      Si Young Byun & Kunyu He, CAPP'20, The University of Chicago
+Author:      Si Young Bryun & Kunyu He, CAPP'20, The University of Chicago
 """
 
 import pandas as pd

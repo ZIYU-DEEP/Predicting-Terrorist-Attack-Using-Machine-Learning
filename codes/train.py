@@ -160,13 +160,11 @@ class ModelingPipeline:
     """
 
     MODEL_NAMES = ["Logistic Regression", "Decision Tree", "Random Forest",
-                   "Bagging", "Ada Boosting", "Naive Bayes", "KNN",
-                   "Linear SVM"]
+                   "Bagging", "Naive Bayes", "KNN", "Linear SVM"]
     MODELS = [LogisticRegression, DecisionTreeClassifier, RandomForestClassifier,
-              BaggingClassifier, AdaBoostClassifier, GaussianNB,
-              KNeighborsClassifier, LinearSVC]
+              BaggingClassifier, GaussianNB, KNeighborsClassifier, LinearSVC]
 
-    THRESHOLDS = [5, 10, 15, 20]
+    THRESHOLDS = [10]
     BASE_METRICS = ["accuracy", "precision", "recall", "f1", "roc_auc"]
 
     METRICS = []
@@ -201,12 +199,6 @@ class ModelingPipeline:
             'max_features': [5, 10, 15, 20, 25, 30]
         },
 
-        "Ada Boosting": {
-            'n_estimators': [100, 300, 500, 1000],
-            'algorithm': {"SAMME", "SAMME.R"},
-            'learning_rate': [0.001, 0.01, 0.1, 0.5, 1, 10]
-        },
-
         "Naive Bayes": {},
 
         "KNN": {
@@ -229,7 +221,6 @@ class ModelingPipeline:
                     "Bagging": {'random_state': SEED,
                                 'oob_score': True,
                                 'n_jobs': -1},
-                    "Ada Boosting": {'random_state': SEED},
                     "Naive Bayes": {},
                     "KNN": {'n_jobs': -1},
                     "Linear SVM": {'random_state': SEED}
@@ -490,8 +481,8 @@ class ModelingPipeline:
                                  "SET NOT ALLOWED OR MODEL CANNOT CONVERGE. "
                                  "ABORTED.") % (self.hyper_grid_index,
                                                 hyper_params))
-                    self.hyper_grid_index += 1
-                    continue
+                self.hyper_grid_index += 1
+                continue
 
             score = self.metrics(self.y_train, predicted_prob)
             if self.verbose >= 1:

@@ -17,7 +17,6 @@ warnings.filterwarnings("ignore")
 import argparse
 import logging
 import os
-import re
 import time
 
 import numpy as np
