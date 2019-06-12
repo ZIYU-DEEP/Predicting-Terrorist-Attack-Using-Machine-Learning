@@ -21,7 +21,7 @@ import time
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import (RandomForestClassifier, AdaBoostClassifier,
-                              BaggingClassifier)
+                              BaggingClassifier, GradientBoostingClassifier)
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import LinearSVC
@@ -160,9 +160,12 @@ class ModelingPipeline:
     """
 
     MODEL_NAMES = ["Logistic Regression", "Decision Tree", "Random Forest",
-                   "Bagging", "Naive Bayes", "KNN", "Linear SVM"]
-    MODELS = [LogisticRegression, DecisionTreeClassifier, RandomForestClassifier,
-              BaggingClassifier, GaussianNB, KNeighborsClassifier, LinearSVC]
+                   "Bagging", "Ada Boosting", "Gradient Boosting",
+                   "Naive Bayes", "KNN", "Linear SVM"]
+    MODELS = [LogisticRegression, DecisionTreeClassifier,
+              RandomForestClassifier, BaggingClassifier, AdaBoostClassifier,
+              GradientBoostingClassifier, GaussianNB,
+              KNeighborsClassifier, LinearSVC]
 
     THRESHOLDS = [10]
     BASE_METRICS = ["accuracy", "precision", "recall", "f1", "roc_auc"]
@@ -199,6 +202,13 @@ class ModelingPipeline:
             'max_features': [5, 10, 15, 20, 25, 30]
         },
 
+        "Gradient Boosting": {
+            'n_estimators': [100, 300, 500],
+            'learning_rate': [0.001, 0.01, 0.1, 1, 10],
+            'subsample': [0.05, 0.1, 0.3, 0.5, 0.7, 1.0, 1.5],
+            'max_depth': [5, 10, 15, 20]
+        },
+
         "Naive Bayes": {},
 
         "KNN": {
@@ -221,6 +231,7 @@ class ModelingPipeline:
                     "Bagging": {'random_state': SEED,
                                 'oob_score': True,
                                 'n_jobs': -1},
+                    "Gradient Boosting": {'random_state': SEED},
                     "Naive Bayes": {},
                     "KNN": {'n_jobs': -1},
                     "Linear SVM": {'random_state': SEED}
@@ -611,6 +622,35 @@ class ModelingPipeline:
 
         data.to_csv(dir_path + file_name, index=False)
         self.hyper_grid_index = 0
+
+    def eval_best(self, model_index, hyper_params, dir_path, file_name):
+        self.configure_model(model_index)
+        self.clf.set_params(**hyper_params)
+        tr_time, ts_time, predicted_prob = self.predict()
+
+        data = self.create_eval_report(dir_path, file_name)
+        temp = [self.model_index, self.model_name, self.hyper_grid_index,
+                hyper_params, tr_time, ts_time]
+        line = temp + [metrics.metrics_at_k(self.y_test, predicted_prob)
+                       for metrics in self.METRICS]
+        data.loc[len(data), :] = line
+        data.to_csv(dir_path + file_name, index=False)
+
+    def label(self, model_index, hyper_params):
+        self.configure_model(model_index)
+        self.clf.set_params(**hyper_params)
+        _, _, predicted_prob = self.predict()
+
+        idx = np.argsort(predicted_prob)[::-1]
+        sorted_prob = predicted_prob[idx]
+
+        cutoff_index = int(len(sorted_prob) * (self.k / 100.0))
+        predictions_at_k = [1 if x < cutoff_index else 0 for x in
+                            range(len(sorted_prob))]
+
+        return idx, predictions_at_k
+
+
 
     def run(self):
         """
