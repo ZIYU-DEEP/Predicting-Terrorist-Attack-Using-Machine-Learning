@@ -175,14 +175,13 @@ def add_past_k(df, full_df, k):
 if __name__ == "__main__":
 
     #gtd = read_data("rev_gtd4.csv")
-
+    counter = 0
     for i in range(2002, 2006, 2):
         data = read_data("rev_gtd4.csv")
         test_year = (i, i + 1)
         train_year = (i - 6, i - 1)
         #print("Train year: {}, test year: {}".format(train_year, test_year))
         test_train = [test_year, train_year]
-        counter = 0
         name = ["test", "train"]
         for i, year in enumerate(test_train):
             folder_name = "./train test sets/Batch {}".format(counter)
