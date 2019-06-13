@@ -1,6 +1,6 @@
 # Predicting-Terrorist-Attack-Using-Machine-Learning
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0788aefc820741f8a08b4adea4235b96)](https://app.codacy.com/app/kunyuhe/Predicting-Terrorist-Attack-Using-Machine-Learning?utm_source=github.com&utm_medium=referral&utm_content=ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning&utm_campaign=Badge_Grade_Dashboard)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0788aefc820741f8a08b4adea4235b96)](https://app.codacy.com/app/kunyuhe/Predicting-Terrorist-Attack-Using-Machine-Learning?utm_source=github.com&utm_medium=referral&utm_content=ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning&utm_campaign=Badge_Grade_Dashboard) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/master?filepath=%2Fnotebooks%2FEvaluate%20Best%20Models.ipynb)
 
 ## To Reproduce Our Results
 
@@ -45,7 +45,7 @@ to check what's user inputs are available for each script. **Remember that `--st
 
 
 
-To retrieve the best models, the recommended model and their test performances, please run this notebook.
+To retrieve the best models, the recommended model and their test performances, please run [this notebook](https://hub.gke.mybinder.org/user/ziyu-deep-predi-achine-learning-elswzdv1/notebooks/notebooks/Evaluate%20Best%20Models.ipynb).
 
 
 
@@ -53,7 +53,7 @@ To retrieve the best models, the recommended model and their test performances, 
 
 - [x] [Final Project Report](<https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/blob/master/Predicting_Future_Terrorist_Attacks_with_State_of_Art_Machine_Learning_Techniques.pdf>);
 - [x] [Code Files](<https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/tree/master/codes>) and [Notebooks](<https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/tree/master/notebooks>);
-- [x] [Train-Test Pair Description](data/train test sets/train_test_sets_desc.PNG);
+- [x] [Train-Test Pair Description](https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/blob/master/data/train%20test%20sets/train_test_sets_desc.PNG);
 - [x] [List of Features](https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/blob/master/processed_data/supervised_learning/List%20of%20Features.csv);
 - [ ] Feature Importances of the Recommended Model;
-- [ ] Final Lists of predicted "positive" entities
+- [ ] [Final Lists of Predicted "positive" Entities](https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/tree/master/evaluations/best%20models/predictions/invervention_lists)
