@@ -55,5 +55,5 @@ To retrieve the best models, the recommended model and their test performances, 
 - [x] [Code Files](<https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/tree/master/codes>) and [Notebooks](<https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/tree/master/notebooks>);
 - [x] [Train-Test Pair Description](https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/blob/master/data/train%20test%20sets/train_test_sets_desc.PNG);
 - [x] [List of Features](https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/blob/master/processed_data/supervised_learning/List%20of%20Features.csv);
-- [ ] Feature Importances of the Recommended Model;
-- [ ] [Final Lists of Predicted "positive" Entities](https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/tree/master/evaluations/best%20models/predictions/invervention_lists)
+- [x] [Feature Importances of the Recommended Model](https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/tree/master/evaluations/best%20models/viz/Feature%20Importances);
+- [x] [Final Lists of Predicted "positive" Entities](https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/tree/master/evaluations/best%20models/predictions/invervention_lists)
