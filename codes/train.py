@@ -650,7 +650,25 @@ class ModelingPipeline:
 
         return idx, predictions_at_k
 
+    def feature_importances(self, model_index, hyper_params):
+        """
 
+        :return:
+        """
+        self.configure_model(model_index)
+        self.clf.set_params(**hyper_params)
+        self.clf.fit(self.X_train, self.y_train)
+
+        dir_path = "../evaluations/best models/viz/Feature Importances/"
+        create_dirs(dir_path)
+
+        title = "%s-%s" % (self.model_name, self.batch)
+        if hasattr(self.clf, "feature_importances_"):
+            importances = self.clf.feature_importances_
+            col_names = read_feature_names(INPUT_DIR + ("Batch %s/" % self.batch),
+                                           'train_features.txt')
+            plot_feature_importances(importances, hyper_params, col_names,
+                                     dir_path, top_n=10, title=title)
 
     def run(self):
         """
