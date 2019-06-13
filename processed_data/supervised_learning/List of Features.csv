@@ -29,7 +29,7 @@ Social economic,ReligCatP_75-85%,Proportion of major religion in the area (75-85
 Social economic,ReligCatP_85-90%,Proportion of major religion in the area (85-90%) ,World Religion map
 Social economic,ReligCatP_90-95%,Proportion of major religion in the area (90-95%) ,World Religion map
 Social economic,ReligCatP_95-100%,Proportion of major religion in the area (95-100%) ,World Religion map
-Social economic,ReligCatP_MISC,"Proportion of major religion in the area (MISC, aggregation of those less than 5% of the sample size)) ",World Religion map
+Social economic,ReligCatP_MISC,"Proportion of major religion in the area (MISC, aggregation of those less than 5% of the sample size)",World Religion map
 Social economic,ChrCatP_0-2%,Proportion of Christianity (0-2%),World Religion map
 Social economic,ChrCatP_2-5%,Proportion of Christianity (2-5%),World Religion map
 Social economic,ChrCatP_5-10%,Proportion of Christianity (5-10%),World Religion map
