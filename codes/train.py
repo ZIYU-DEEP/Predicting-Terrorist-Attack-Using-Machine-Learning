@@ -659,7 +659,7 @@ class ModelingPipeline:
         self.clf.set_params(**hyper_params)
         self.clf.fit(self.X_train, self.y_train)
 
-        dir_path = "../evaluations/best models/viz/Feature Importances/"
+        dir_path = "../evaluations/best models/viz/"
         create_dirs(dir_path)
 
         title = "%s-%s" % (self.model_name, self.batch)
