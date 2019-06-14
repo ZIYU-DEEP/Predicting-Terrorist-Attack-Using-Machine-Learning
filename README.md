@@ -45,7 +45,7 @@ to check what's user inputs are available for each script. **Remember that `--st
 
 
 
-To retrieve the best models, the recommended model and their test performances, please run [this notebook](https://hub.gke.mybinder.org/user/ziyu-deep-predi-achine-learning-elswzdv1/notebooks/notebooks/Evaluate%20Best%20Models.ipynb).
+To retrieve the best models, the recommended model and their test performances, please run the notebook under [this link](https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning).
 
 
 
