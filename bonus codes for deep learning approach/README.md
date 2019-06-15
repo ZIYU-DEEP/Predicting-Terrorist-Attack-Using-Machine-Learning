@@ -9,6 +9,7 @@ You can refer to `RNN Implementation.ipynb` for a illustation of function usages
 ## Requirements
 - Python 2.7 +
 - Pytorch 0.4.0 + with GPU
+- Numpy 1.10 +
 
 ## Dataset
 
