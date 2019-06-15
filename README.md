@@ -51,7 +51,7 @@ To retrieve the best models, the recommended model and their test performances, 
 
 ### Final Project Submission Check List
 
-- [x] [Final Project Report](<https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/blob/master/Predicting_Future_Terrorist_Attacks_with_State_of_Art_Machine_Learning_Techniques.pdf>);
+- [x] [Final Project Report](<https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/blob/master/Final%20Report.pdf>);
 - [x] [Code Files](<https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/tree/master/codes>) and [Notebooks](<https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/tree/master/notebooks>);
 - [x] [Train-Test Pair Description](https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/blob/master/data/train%20test%20sets/train_test_sets_desc.PNG);
 - [x] [List of Features](https://github.com/ZIYU-DEEP/Predicting-Terrorist-Attack-Using-Machine-Learning/blob/master/processed_data/supervised_learning/List%20of%20Features.csv);
