@@ -4,13 +4,15 @@ This theory is proposed by the paper of [Predicting the Next Location: A Recurre
 
 The deep learning approach is currently only a bonus to our project and we will contiuning updating this repo for better performance. Our current working direction is improving the calculation of linear interpolation and the loss function calculation.
 
+You can refer to `RNN Implementation.ipynb` for a illustation of function usages and a simple pipeline implementation. Note that this approach is only a bonus part, so we do not provide a complete pipeline as the other approach. We will definitely work in future to improve the code.
+
 ## Requirements
 - Python 2.7 +
 - Pytorch 0.4.0 + with GPU
 
 ## Dataset
 
-The original GTD dataset is not contained in this dataset, please refer to the `../data` folder for the full data. We transfer the full data in the form of `gtd.csv`. You can refer to the notebook `gtddata_manipulation.ipynb`, which is a simple sample of how we accomplish the transfer.
+The original GTD dataset is not contained in this dataset, please refer to the `../data` folder for the full data. We transfer the full data in the form of `gtd.csv`. You can refer to the notebook `gtddata_manipulation.ipynb`, which is a simple sample of how we accomplish the transfer. If you want to re-implement this notebook, be sure to reset the path.
 
 ## Usage
 
